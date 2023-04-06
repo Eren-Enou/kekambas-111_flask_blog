@@ -1,6 +1,6 @@
 from flask import request
 from . import api
-from app.models import Post
+from app.models import Post, User
 
 
 @api.route('/')
@@ -50,3 +50,12 @@ def create_post():
 
     # Return the new post as a JSON response
     return new_post.to_dict(), 201
+
+
+# Endpoint to get a user by their ID
+@api.route('/users/<user_id>', methods=["GET"])
+def get_user(user_id):
+    user = User.query.get(user_id)
+    if user is None:
+        return {'error': f'User with the ID of {user_id} does not exist.'}, 404
+    return user.to_dict()
